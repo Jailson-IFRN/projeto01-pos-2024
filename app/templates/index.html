@@ -14,27 +14,19 @@
         <div class="content second-content">
             <div class="second-column">
                 <p class="description description-second">Use sua Matrícula:</p>
-                <form class="form" method="POST" action="{{ url_for('dashboard') }}">
-                    <label class="label-input" for="">
+                <form class="form" method="POST" action="{{ url_for('index') }}">
+                    <label class="label-input" for="matricula">
                         <i class="far fa-envelope icon-modify"></i>
-                        <input type="text" placeholder="Matrícula" name="matricula">
+                        <input type="text" id="matricula" placeholder="Matrícula" name="matricula">
                     </label>
-                    
-                    <label class="label-input" for="">
+                    <label class="label-input" for="password">
                         <i class="fas fa-lock icon-modify"></i>
-                        <input type="password" placeholder="Senha" name="password">
+                        <input type="password" id="password" placeholder="Senha" name="password">
                     </label>
-                    
-                    
-                    <button type="submit" name="Entrar">Entrar
-
+                    <button type="submit" class="btn btn-primary">Entrar</button>
                 </form>
             </div>
         </div>
-    </div>
-    
-        </div><!-- second-content -->
-    </div>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </div>    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

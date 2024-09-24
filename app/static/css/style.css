@@ -45,8 +45,9 @@ body {
     margin-bottom: 20px; 
 }
 
-.btn {
-    border-radius: 5px; 
+.btn-primary {
+    background-color: #aec6cf; 
+    border-radius: 5px;
     text-transform: uppercase;
     color: #fff;
     font-size: 12px;
@@ -55,12 +56,11 @@ body {
     font-weight: bold;
     border: none;
     margin-top: 20px;
-    transition: background-color .3s, border-color .3s; 
-    background-color: #58af9b; 
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #47a68d;
+    background-color: #92a8d1; 
 }
 
 .form {
@@ -99,7 +99,7 @@ body {
     text-align: center;
 }
 
-/* VERSÃO MOBILE */
+
 @media screen and (max-width: 1040px) {
     .content {
         width: 90%;
