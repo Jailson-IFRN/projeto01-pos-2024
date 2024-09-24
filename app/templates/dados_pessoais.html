@@ -17,6 +17,18 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+    <style>
+        /* Estilo para a foto */
+        .profile-img {
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -26,7 +38,7 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('dashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-user-graduate"></i>
                 </div>
@@ -36,7 +48,7 @@
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('novo') }}">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>SUAP/API</span>
                 </a>
@@ -61,7 +73,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ dados.nome_usual}}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ dados.nome_usual }}</span>
                                 <img class="img-profile rounded-circle" src="{{ dados.url_foto_150x200 }}">
                             </a>
                         </li>
@@ -72,27 +84,26 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <h1 class="h3 mb-4 text-gray-800">Perfil Acadêmico</h1>
-
                     <!-- Aluno Info -->
                     <div class="card mb-4">
+                        <!-- Foto do aluno no topo -->
+                        <img class="profile-img" src="{{ dados.url_foto_150x200 }}" alt="Foto do Aluno">
+
                         <div class="card-header">
                             Informações Pessoais
                         </div>
                         <div class="card-body">
                             <p><strong>Nome Completo:</strong> {{ vinculo.nome }}</p>
-                            <p><strong>Data nascimento:</strong> {{ dados.data_nascimento }}  </p>
-                            <p><strong>Matrícula: </strong>{{ dados.matricula }} </p>
+                            <p><strong>Data nascimento:</strong> {{ dados.data_nascimento }}</p>
+                            <p><strong>Matrícula:</strong> {{ dados.matricula }}</p>
                             <p><strong>CPF:</strong> {{ dados.cpf }}</p>
                             <p><strong>Curso:</strong> {{ vinculo.curso }}</p>
                             <p><strong>Campus:</strong> {{ vinculo.campus }}</p>
                             <p><strong>Situação:</strong> {{ vinculo.situacao }}</p>
                             <p><strong>Email para Contato:</strong> {{ dados.email }}</p>
-                            <p><strong>Foto:</strong> <img src="{{ dados.url_foto_150x200 }}" ></p>
                         </div>
                     </div>
 
-                
                 </div>
                 <!-- /.container-fluid -->
 
@@ -102,9 +113,6 @@
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
-                    <div class="text-center my-auto">
-                        <span>&copy; SAGE 2024</span>
-                    </div>
                 </div>
             </footer>
             <!-- End of Footer -->

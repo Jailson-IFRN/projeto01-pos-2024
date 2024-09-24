@@ -7,9 +7,14 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import io
 import requests
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate
+
+
 
 api_url = "https://suap.ifrn.edu.br/api/"
-
 
 
 
@@ -29,7 +34,7 @@ def index():
             headers = {"Authorization": f'Bearer {token}'}
             response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
             meus_dados = response.json()
-            
+            print(meus_dados['nome_usual'])
             return render_template('dashboard.html', dados=meus_dados, vinculo=meus_dados['vinculo'])
         else:
             flash("Credenciais inválidas. Tente novamente.")
@@ -38,12 +43,25 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/dashboard', methods=['GET', 'POST'])    
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    if request.method == 'GET':
-        return render_template('dashboard.html')
+    
+    token = session.get('token')
+    
+    if not token:
+        flash("Você precisa estar logado para acessar o dashboard.")
+        return redirect(url_for('index'))
+
+    headers = {"Authorization": f'Bearer {token}'}
+    response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
+    
+    if response.status_code == 200:
+        meus_dados = response.json()
+        return render_template('dashboard.html', dados=meus_dados, vinculo=meus_dados['vinculo'])
     else:
-        return render_template('dashboard.html')
+        flash("Erro ao carregar os dados do usuário.")
+        return redirect(url_for('index'))
+
 
 
 
@@ -96,16 +114,18 @@ def students():
 
 
 
+
+
 @app.route('/gerar_pdf')
 def gerar_pdf():
-    token = session.get('token')  # Recupera o token da sessão
+    token = session.get('token')  
     if not token:
         flash('Usuário não autenticado. Faça login novamente.')
         return redirect(url_for('index'))
 
     headers = {"Authorization": f'Bearer {token}'}
 
-    # Busca os dados pessoais do aluno
+
     dados_response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
     if dados_response.status_code != 200:
         flash("Erro ao buscar dados do aluno.")
@@ -113,7 +133,7 @@ def gerar_pdf():
 
     dados_aluno = dados_response.json()
 
-    # Busca os períodos letivos do aluno
+
     periodos_response = requests.get(f"{api_url}v2/minhas-informacoes/meus-periodos-letivos/", headers=headers)
     if periodos_response.status_code != 200:
         flash("Erro ao buscar períodos letivos.")
@@ -121,44 +141,67 @@ def gerar_pdf():
 
     periodos = periodos_response.json()
 
-    # Criar o buffer para o PDF
     buffer = io.BytesIO()
-    pdf = canvas.Canvas(buffer, pagesize=letter)
-    pdf.setTitle("Dados Pessoais e Boletim")
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
 
-    # Adiciona os dados pessoais ao PDF
-    pdf.drawString(100, 750, f"Nome: {dados_aluno['nome_usual']}")
-    pdf.drawString(100, 735, f"Matrícula: {dados_aluno['matricula']}")
-    pdf.drawString(100, 720, f"Email: {dados_aluno['email']}")
-    pdf.drawString(100, 705, f"CPF: {dados_aluno['cpf']}")
-    pdf.drawString(100, 690, f"Data de Nascimento: {dados_aluno['data_nascimento']}")
-    pdf.drawString(100, 675, f"Curso: {dados_aluno['vinculo']['curso']}")
+    # data
+    dados_pessoais = [
+        ['Nome:', dados_aluno['nome_usual']],
+        ['Matrícula:', dados_aluno['matricula']],
+        ['Email:', dados_aluno['email']],
+        ['CPF:', dados_aluno['cpf']],
+        ['Data de Nascimento:', dados_aluno['data_nascimento']],
+        ['Curso:', dados_aluno['vinculo']['curso']]
+    ]
 
-    # Adiciona os boletins ao PDF
-    y_position = 650
-    pdf.drawString(100, y_position, "Boletim:")
-    y_position -= 15
+    tabela_dados = Table(dados_pessoais, colWidths=[2 * inch, 4 * inch])
+    tabela_dados.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    elements.append(tabela_dados)
 
+    
     for periodo in periodos:
         ano_letivo = periodo['ano_letivo']
         periodo_letivo = periodo['periodo_letivo']
         boletim_response = requests.get(f"{api_url}v2/minhas-informacoes/boletim/{ano_letivo}/{periodo_letivo}/", headers=headers)
-        
+
         if boletim_response.status_code == 200:
             boletim_data = boletim_response.json()
-            pdf.drawString(100, y_position, f"Ano: {ano_letivo}, Período: {periodo_letivo}")
-            y_position -= 10
             
+        
+            elements.append(Table([[f"Ano: {ano_letivo} - Período: {periodo_letivo}"]], colWidths=[6 * inch]))
+            
+    
+            boletim_table_data = [['Disciplina', 'Média Final']]
             for disciplina in boletim_data:
-                pdf.drawString(120, y_position, f"{disciplina['disciplina']}: {disciplina['media_final_disciplina']}")
-                y_position -= 10
+                boletim_table_data.append([disciplina['disciplina'], disciplina['media_final_disciplina']])
+            
+            boletim_table = Table(boletim_table_data, colWidths=[4 * inch, 2 * inch])
+            boletim_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ]))
+            elements.append(boletim_table)
         else:
-            pdf.drawString(100, y_position, f"Erro ao buscar boletim para {ano_letivo}/{periodo_letivo}")
-            y_position -= 10
+            elements.append(Table([[f"Erro ao buscar boletim para {ano_letivo}/{periodo_letivo}"]], colWidths=[6 * inch]))
 
-    pdf.save()
+    doc.build(elements)
     buffer.seek(0)
 
-    
     return send_file(buffer, as_attachment=True, download_name='dados_pessoais_boletim.pdf')
+
 

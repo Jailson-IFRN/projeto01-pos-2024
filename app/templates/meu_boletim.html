@@ -17,7 +17,6 @@
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-
 </head>
 
 <body id="page-top">
@@ -53,14 +52,14 @@
                 <form class="form" method="POST">
                     <div class="form-group">
                         <label for="ano_letivo">
-                            <i class="far fa-envelope icon-modify"></i>
+                            <i class="fas fa-calendar-alt icon-modify"></i> <!-- Ícone do Ano Letivo -->
                             Ano Letivo
                         </label>
                         <input type="text" class="form-control" name="ano_letivo" placeholder="Digite o Ano Letivo" required>
                     </div>
                     <div class="form-group">
                         <label for="periodo_letivo">
-                            <i class="fas fa-lock icon-modify"></i>
+                            <i class="fas fa-clock icon-modify"></i> <!-- Ícone do Período Letivo -->
                             Período Letivo
                         </label>
                         <input type="text" class="form-control" name="periodo_letivo" placeholder="Digite o Período Letivo" required>
