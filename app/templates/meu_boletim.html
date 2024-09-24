@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SUAP/API - Boletim</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">SAGE</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Início</span></a>
+        </li>
+
+        
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+     
+    
+    <div id="content">
+        <br><br><br><br><br><br>
+        <form class="form" method="POST">
+            <label class="label-input" for="ano_letivo">
+                <i class="far fa-envelope icon-modify"></i>
+                <input type="text" placeholder="Ano Letivo" name="ano_letivo" required>
+            </label>
+            
+            <label class="label-input" for="periodo_letivo">
+                <i class="fas fa-lock icon-modify"></i>
+                <input type="text" placeholder="Período Letivo" name="periodo_letivo" required>
+            </label>
+            
+            <button type="submit" name="Filtrar">Filtrar</button>
+        </form>
+    
+        <br><br><br><br><br><br>
+    
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0 font-weight-bold text-primary">Boletim - suas disciplinas e notas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Média final da disciplina</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if boletim %}
+                                    {% for disciplina in boletim %}
+                                        <tr>
+                                            <td>{{ disciplina.disciplina }}</td>
+                                            <td>{{ disciplina.media_final_disciplina }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2">Nenhum dado encontrado</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- End of Page Content -->
+
+        </div>
+        <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
+
+</body>
+</html>
