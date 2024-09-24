@@ -14,7 +14,6 @@ api_url = "https://suap.ifrn.edu.br/api/"
 
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -29,7 +28,7 @@ def index():
             headers = {"Authorization": f'Bearer {token}'}
             response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
             meus_dados = response.json()
-            
+            print(meus_dados['nome_usual'])
             return render_template('dashboard.html', dados=meus_dados, vinculo=meus_dados['vinculo'])
         else:
             flash("Credenciais inválidas. Tente novamente.")
