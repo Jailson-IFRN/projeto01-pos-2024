@@ -11283,3 +11283,35 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+.card {
+  border-radius: 10px; /* Arredondar os cantos dos cartões */
+  height: 200px; /* Aumente a altura dos cartões conforme necessário */
+}
+
+.card-body {
+  padding: 20px; /* Espaço interno */
+  display: flex; /* Usar flexbox */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+}
+
+.text-xs {
+  font-size: 12px; /* Ajuste o tamanho da fonte conforme necessário */
+}
+
+.h5 {
+  font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+}
+
+/* Mantenha as classes de cores conforme suas definições */
+.border-left-primary {
+  border-left: 5px solid #007bff; /* Exemplo de cor */
+}
+
+.border-left-success {
+  border-left: 5px solid #28a745; /* Exemplo de cor */
+}
+
+.border-left-warning {
+  border-left: 5px solid #ffc107; /* Exemplo de cor */
+}

@@ -16,62 +16,60 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+
 </head>
 
 <body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">SAGE</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content" class="container-fluid">
+            <!-- Formulário -->
+            <div class="form-container">
+                <form class="form" method="POST">
+                    <div class="form-group">
+                        <label for="ano_letivo">
+                            <i class="far fa-envelope icon-modify"></i>
+                            Ano Letivo
+                        </label>
+                        <input type="text" class="form-control" name="ano_letivo" placeholder="Digite o Ano Letivo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodo_letivo">
+                            <i class="fas fa-lock icon-modify"></i>
+                            Período Letivo
+                        </label>
+                        <input type="text" class="form-control" name="periodo_letivo" placeholder="Digite o Período Letivo" required>
+                    </div>
+                    <button type="submit" name="Filtrar" class="btn btn-primary" style="align-self: center; margin-left: 10px;">Filtrar</button>
+                </form>
             </div>
-            <div class="sidebar-brand-text mx-3">SAGE</div>
-        </a>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Início</span></a>
-        </li>
-
-        
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-    </ul>
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
-     
-    
-    <div id="content">
-        <br><br><br><br><br><br>
-        <form class="form" method="POST">
-            <label class="label-input" for="ano_letivo">
-                <i class="far fa-envelope icon-modify"></i>
-                <input type="text" placeholder="Ano Letivo" name="ano_letivo" required>
-            </label>
-            
-            <label class="label-input" for="periodo_letivo">
-                <i class="fas fa-lock icon-modify"></i>
-                <input type="text" placeholder="Período Letivo" name="periodo_letivo" required>
-            </label>
-            
-            <button type="submit" name="Filtrar">Filtrar</button>
-        </form>
-    
-        <br><br><br><br><br><br>
-    
-        <div class="container-fluid">
+            <!-- Card do Boletim -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="m-0 font-weight-bold text-primary">Boletim - suas disciplinas e notas</h5>
@@ -104,22 +102,16 @@
                 </div>
             </div>
         </div>
-    </div>
-            <!-- End of Page Content -->
-
-        </div>
-        <!-- End of Main Content -->
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scripts -->
-<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
 
 </body>
+
 </html>
