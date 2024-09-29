@@ -14,33 +14,52 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate
 
 
 
+client_id = "H5uEWcuy1RXBiiVnu0w1oZDyxQKe8WF4tp3PGaV1"
+client_secret = "QVRGsWBk81oMvS5bAgkE6M0g98Zn1LHY90mIkLM5fdqM45IXnRaI5DmVM4lNMBCH9amytTXEiZpHvB49SHtUXrecYe7V9J3MjLFeCkWpdEnlm0iHmIbd45W4uRpTPCoo"
+redirect_uri = "http://localhost:5000/callback"  
+authorization_base_url = "https://suap.ifrn.edu.br/o/authorize/"
+token_url = "https://suap.ifrn.edu.br/o/token/"
 api_url = "https://suap.ifrn.edu.br/api/"
 
 
-
-
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        user = request.form['matricula']
-        password = request.form['password']
-        data = {"username": user, "password": password}
-        response = requests.post(api_url + "v2/autenticacao/token/", json=data)
+    
+    authorization_url = f"{authorization_base_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}"
+    return redirect(authorization_url)
 
-        if response.status_code == 200:
-            token = response.json()["access"]
-            session['token'] = token  # Vou tentar armazenar aqui o token na sessão
-            headers = {"Authorization": f'Bearer {token}'}
-            response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
-            meus_dados = response.json()
-            print(meus_dados['nome_usual'])
-            return render_template('dashboard.html', dados=meus_dados, vinculo=meus_dados['vinculo'])
-        else:
-            flash("Credenciais inválidas. Tente novamente.")
-            return render_template('index.html')
+@app.route('/callback')
+def callback():
+    
+    code = request.args.get('code')
+
+    
+    token_data = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': redirect_uri,
+        'client_id': client_id,
+        'client_secret': client_secret,
+    }
+
+    response = requests.post(token_url, data=token_data)
+    
+    if response.status_code == 200:
+        token_json = response.json()
+        token = token_json.get('access_token')
+
+        
+        session['token'] = token
+
+        
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get(f"{api_url}v2/minhas-informacoes/meus-dados/", headers=headers)
+        meus_dados = response.json()
+        
+        return render_template('dashboard.html', dados=meus_dados, vinculo=meus_dados['vinculo'])
     else:
-        return render_template('index.html')
+        flash("Falha na autenticação. Tente novamente.")
+        return redirect(url_for('index'))
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
