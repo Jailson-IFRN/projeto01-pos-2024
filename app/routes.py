@@ -14,8 +14,8 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate
 
 
 
-client_id = "H5uEWcuy1RXBiiVnu0w1oZDyxQKe8WF4tp3PGaV1"
-client_secret = "QVRGsWBk81oMvS5bAgkE6M0g98Zn1LHY90mIkLM5fdqM45IXnRaI5DmVM4lNMBCH9amytTXEiZpHvB49SHtUXrecYe7V9J3MjLFeCkWpdEnlm0iHmIbd45W4uRpTPCoo"
+client_id = input()
+client_secret = input()
 redirect_uri = "http://localhost:5000/callback"  
 authorization_base_url = "https://suap.ifrn.edu.br/o/authorize/"
 token_url = "https://suap.ifrn.edu.br/o/token/"
